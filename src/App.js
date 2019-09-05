@@ -334,6 +334,9 @@ class App extends Component {
           </Flex>
 
           <Flex pt={10}>
+		  	<Box width={1}>
+              <PublicAddress address={tokenContractAddress} label="Token address"/>  
+            </Box>
             <Box width={1/2}>
               <PublicAddress address={this.state.userAddress} label="Your address"/>  
             </Box>
