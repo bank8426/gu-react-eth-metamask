@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Web3 from 'web3';
-import {PublicAddress,Flex,Box, Button,Input,Field,MetaMaskButton,Form} from 'rimble-ui';
+import {Loader,ToastMessage,PublicAddress,Flex,Box, Button,Input,Field,MetaMaskButton,Form} from 'rimble-ui';
 import ConnectionBanner from '@rimble/connection-banner';
 import NetworkIndicator from '@rimble/network-indicator';
 
@@ -259,7 +259,8 @@ class App extends Component {
     requiredNetworkId: 4,
     isConnect: false,
     isMetaMaskInstalled:false,
-    afterMount:false
+	afterMount:false,
+	isProcess:false,
   }
 
   async componentDidMount(){
@@ -284,14 +285,13 @@ class App extends Component {
   async connectMetaMask() {
     await window.ethereum.enable();
     this.w3 = new Web3(window.ethereum)
-    console.log(ABI)
-    this.contract = new this.w3.eth.Contract(ABI,tokenContractAddress)
+    const contract = new this.w3.eth.Contract(ABI,tokenContractAddress)
     const userAddress = (await this.w3.eth.getAccounts())[0]
-    const userBalance = await this.contract.methods.balanceOf(userAddress).call()
+    const userBalance = await contract.methods.balanceOf(userAddress).call()
     const currentNetworkId = await this.w3.eth.net.getId();
     const isConnect = await window.ethereum._metamask.isUnlocked()
     
-    this.setState({userAddress,userBalance,currentNetworkId,isConnect})
+    this.setState({userAddress,userBalance,currentNetworkId,isConnect,contract})
   }
 
   onChangeReceiverAddress(e){
@@ -303,11 +303,48 @@ class App extends Component {
   }
 
   async onSendTransaction(e){
-    e.preventDefault();
-    const result = await this.contract.methods
+	e.preventDefault();
+	this.setState({isProcess : true})
+    const result = await this.state.contract.methods
       .transfer(this.state.sendToAddress,this.state.sendAmount)
-      .send({from:this.state.userAddress})
-    console.log(result)
+	  .send({from:this.state.userAddress})
+	  .on('transactionHash', function(hash){
+		window.toastProvider.addMessage("Processing payment...", {
+			secondaryMessage: "Check progress on Rinkerby Etherscan",
+			actionHref: `https://rinkeby.etherscan.io/tx/${hash}`,
+			actionText: "Check",
+			variant: "processing"
+		})
+	})
+	//confirmation call every time get block confirmation
+	// .on('confirmation', function(confirmationNumber, receipt){
+	// 	console.log("confirmation")
+	// 	console.log(`confirmationNumber : ${confirmationNumber}`)
+	// 	console.log(`receipt : ${receipt}`)
+	// })
+	//receipt is check when first success
+	.on('receipt', async function(receipt){
+		this.w3 = new Web3(window.ethereum)
+		const contract = new this.w3.eth.Contract(ABI,tokenContractAddress)
+		const userAddress = (await this.w3.eth.getAccounts())[0]
+		const userBalance = await contract.methods.balanceOf(userAddress).call()
+		console.log(userBalance)
+		// console.log('receipt');
+		console.log(receipt);
+		window.toastProvider.addMessage(`GUB ${receipt.events.Transfer.returnValues.value} token(s) sent`, {
+			secondaryMessage: `You have ${userBalance} GUB token(s) remaining`,
+			variant: "success"
+			})
+	})
+	.on('error', function(error){
+		console.log('error')
+		console.log(error)
+		window.toastProvider.addMessage("Payment failed", {
+			secondaryMessage: "You rejected payment",
+			variant: "failure"
+		})
+	}); // If there's an out of gas error the second parameter is the receipt.
+	this.setState({isProcess : false})
   }
 
   render() {
@@ -341,7 +378,7 @@ class App extends Component {
               <PublicAddress address={this.state.userAddress} label="Your address"/>  
             </Box>
             <Box width={1/2}>
-              <Field label="Your Amount" width={1}>
+              <Field label="Your Balance" width={1}>
                 <Input type="text" value={this.state.userBalance} width={1} disabled required />  
               </Field>
             </Box>
@@ -369,9 +406,19 @@ class App extends Component {
               />
             </Form.Field>
             
-            <Button icon="Send" mr={3} type="submit" width={1}>Send</Button>
+			{ this.state.isProcess ?
+            <Button mr={3} width={1}>
+				<Loader color="white" />
+			</Button>
+			:
+			<Button icon="Send" mr={3} type="submit" width={1}>
+				 Send
+			</Button>
+			}
           </Form>
         </Box>
+		
+		<ToastMessage.Provider ref={node => (window.toastProvider = node)} />
       </div>
     );
   }
