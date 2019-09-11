@@ -385,7 +385,7 @@ class App extends Component {
           </Flex>
 
           <Form onSubmit={ (e) => { this.onSendTransaction(e)}}>
-            <Form.Field label="To" width={1}>
+            <Form.Field label="Receiver address" width={1}>
               <Form.Input
                 type="text" 
                 required
@@ -395,7 +395,7 @@ class App extends Component {
               />
             </Form.Field>
 
-            <Form.Field label="Amount" width={1}>
+            <Form.Field label="Amount you want to send" width={1}>
               <Form.Input
                 type="number" 
                 required
@@ -412,7 +412,7 @@ class App extends Component {
 			</Button>
 			:
 			<Button icon="Send" mr={3} type="submit" width={1}>
-				 Send
+				 Send GUB Token
 			</Button>
 			}
           </Form>
