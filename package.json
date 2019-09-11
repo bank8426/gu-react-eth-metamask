@@ -5,6 +5,8 @@
   "dependencies": {
     "@rimble/connection-banner": "^1.2.1",
     "@rimble/network-indicator": "^1.2.1",
+    "global": "^4.4.0",
+    "jest": "^24.9.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
