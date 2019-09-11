@@ -29,16 +29,16 @@ jobs:
 
       - run: yarn install
 
+      - run:
+          name: "Run Jest and Collect Coverage Reports"
+          command: yarn test --coverage a
+      - store_artifacts:
+          path: coverage
+          
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-      - run:
-          name: "Run Jest and Collect Coverage Reports"
-          command: jest --collectCoverage=true
-      - store_artifacts:
-          path: coverage
 
       # buil!
       - run: CI=false yarn build
