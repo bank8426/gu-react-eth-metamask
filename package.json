@@ -7,6 +7,7 @@
     "@rimble/network-indicator": "^1.2.1",
     "global": "^4.4.0",
     "jest": "24.8.0",
+    "jest-coverage-badges": "^1.1.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
@@ -18,7 +19,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:coverage": "npm test -- --coverage",
+    "test:badges": "npm run test:coverage  && jest-coverage-badges",
+    "make-badges": "npm run jest-badges-readme"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,6 +37,13 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "coverageReporters": [
+      "json-summary", 
+      "text",
+      "lcov"
     ]
   }
 }
