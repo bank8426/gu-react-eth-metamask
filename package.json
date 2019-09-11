@@ -40,10 +40,16 @@
   },
   "jest": {
     "coverageReporters": [
-      "json-summary", 
+      "json-summary",
       "text",
       "lcov"
     ],
-    "reporters": ["default", "jest-junit"]
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
+  },
+  "devDependencies": {
+    "jest-junit": "^8.0.0"
   }
 }
