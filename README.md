@@ -1,6 +1,6 @@
 | Statements | Branches | Functions | Lines |
 | -----------|----------|-----------|-------|
-| ![Statements](https://img.shields.io/badge/Coverage-Unknown%25-brightgreen.svg "Make me better!") | ![Branches](https://img.shields.io/badge/Coverage-Unknown%25-brightgreen.svg "Make me better!") | ![Functions](https://img.shields.io/badge/Coverage-Unknown%25-brightgreen.svg "Make me better!") | ![Lines](https://img.shields.io/badge/Coverage-Unknown%25-brightgreen.svg "Make me better!") |
+| ![Statements](https://img.shields.io/badge/Coverage-9.76%25-red.svg "Make me better!") | ![Branches](https://img.shields.io/badge/Coverage-13.64%25-red.svg "Make me better!") | ![Functions](https://img.shields.io/badge/Coverage-10.34%25-red.svg "Make me better!") | ![Lines](https://img.shields.io/badge/Coverage-9.76%25-red.svg "Make me better!") |
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
