@@ -43,10 +43,6 @@
       "json-summary",
       "text",
       "lcov"
-    ],
-    "reporters": [
-      "default",
-      "jest-junit"
     ]
   },
   "devDependencies": {
