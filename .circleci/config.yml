@@ -29,12 +29,6 @@ jobs:
 
       - run: yarn install
 
-      - run:
-          name: "Run Jest and Collect Coverage Reports"
-          command: yarn test --coverage a
-      - store_artifacts:
-          path: coverage
-          
       - save_cache:
           paths:
             - node_modules
@@ -42,8 +36,11 @@ jobs:
 
       # buil!
       - run: CI=false yarn build
-      # run tests!
-      - run: yarn test
+      # run tests and Collect Coverage Reports!
+      - run: yarn test --coverage a
+      - store_artifacts:
+          path: coverage
+
       # save dist folder!
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
